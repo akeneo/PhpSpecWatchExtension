@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Lurker\ResourceWatcher;
 use Lurker\Event\FilesystemEvent;
+use Symfony\Component\Process\Process;
 
 class RunCommand extends BaseRunCommand
 {
@@ -35,16 +36,11 @@ class RunCommand extends BaseRunCommand
         $watcher->track('phpspec.specifications', 'spec/');
 
         $watcher->addListener('phpspec.specifications', function (FilesystemEvent $event) use ($input, $output) {
-            $container = $this->getApplication()->getContainer();
-            $container->setParam('formatter.name',
-                $input->getOption('format') ?: $container->getParam('formatter.name')
-            );
-            $container->configure();
-
-            $suite       = $container->get('loader.resource_loader')->load($event->getResource());
-            $suiteRunner = $container->get('runner.suite');
-
-            return $suiteRunner->run($suite);
+            $cmd = sprintf('phpspec run -fpretty %s', $event->getResource());
+            $output->writeln('Executing ' . $cmd);
+            $process = new Process($cmd);
+            $process->run();
+            $output->writeln($process->getOutput());
         });
 
         $watcher->start();
