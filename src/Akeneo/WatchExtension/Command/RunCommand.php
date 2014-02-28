@@ -36,9 +36,7 @@ class RunCommand extends BaseRunCommand
         $watcher->track('phpspec.specifications', 'spec/');
 
         $watcher->addListener('phpspec.specifications', function (FilesystemEvent $event) use ($input, $output) {
-            $cmd = sprintf('phpspec run -fpretty %s', $event->getResource());
-            $output->writeln('Executing ' . $cmd);
-            $process = new Process($cmd);
+            $process = new Process(sprintf('phpspec run -fpretty --ansi %s', $event->getResource()));
             $process->run();
             $output->writeln($process->getOutput());
         });
