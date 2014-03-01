@@ -33,10 +33,14 @@ class RunCommand extends BaseRunCommand
         }
 
         $watcher = new ResourceWatcher;
-        $watcher->track('phpspec.specifications', 'spec/');
+        $watcher->track('phpspec.specifications', 'spec/', FilesystemEvent::MODIFY);
+        $watcher->track('phpspec.sources', 'src/', FilesystemEvent::MODIFY);
 
-        $watcher->addListener('phpspec.specifications', function (FilesystemEvent $event) use ($input, $output) {
-            $process = new Process(sprintf('phpspec run -fpretty --ansi %s', $event->getResource()));
+        $watcher->addListener('all', function (FilesystemEvent $event) use ($input, $output) {
+            $process = new Process(sprintf(
+                'clear && phpspec run -y --ansi %s',
+                $event->getResource()
+            ));
             $process->run();
             $output->writeln($process->getOutput());
         });
