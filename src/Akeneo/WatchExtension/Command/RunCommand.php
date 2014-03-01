@@ -27,8 +27,7 @@ class RunCommand extends BaseRunCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption('watch'))
-        {
+        if (!$input->getOption('watch')) {
             return parent::execute($input, $output);
         }
 
@@ -37,8 +36,16 @@ class RunCommand extends BaseRunCommand
         $watcher->track('phpspec.sources', 'src/', FilesystemEvent::MODIFY);
 
         $watcher->addListener('all', function (FilesystemEvent $event) use ($input, $output) {
+            $options = '';
+            if ($format = $input->getOption('format')) {
+                $options = sprintf(' -f%s', $format);
+            }
+            if ($input->getOption('verbose')) {
+                $options .= ' -v';
+            }
             $process = new Process(sprintf(
-                'clear && phpspec run -y --ansi %s',
+                'clear && phpspec run -y --ansi%s %s',
+                $options,
                 $event->getResource()
             ));
             $process->run();
