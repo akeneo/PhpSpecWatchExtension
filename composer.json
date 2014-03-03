@@ -1,5 +1,5 @@
 {
-    "name": "akeneo/watch-extension",
+    "name": "akeneo/phpspec-watch-extension",
     "require": {
         "phpspec/phpspec": "2.0.*@dev",
         "henrikbjorn/lurker": "1.0.*@dev",
@@ -9,7 +9,7 @@
     "authors": [
         {
             "name": "Gildas Quéméner",
-            "email": "gildas.quemener@gmail.com"
+            "email": "gildas@akeneo.com"
         }
     ],
     "minimum-stability": "stable"
