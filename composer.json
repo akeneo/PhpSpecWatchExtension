@@ -1,5 +1,6 @@
 {
     "name": "akeneo/phpspec-watch-extension",
+    "description": "A PhpSpec extension to automatically rerun specs",
     "require": {
         "phpspec/phpspec": "2.0.*@dev",
         "henrikbjorn/lurker": "1.0.*@dev",
@@ -12,5 +13,10 @@
             "email": "gildas@akeneo.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": {
+            "Akeneo\\WatchExtension": "src/"
+        }
+    }
 }
